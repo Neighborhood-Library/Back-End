@@ -3,6 +3,7 @@ const db=require('../database/dbConfig.js');
  module.exports={
     findMessageById,
     findMessagesByBookId,
+    findMessagesByTranId,
     addMessage
 }
 
@@ -14,6 +15,11 @@ async function findMessageById(id){
 // Find messages by google book id
 async function findMessagesByBookId(google_book_id){
     return db('messages').where({google_book_id: google_book_id});
+}
+
+// Find messages by transaction id
+async function findMessagesByTranId(tran_id){
+    return db('messages').where({tran_id});
 }
 
 // Create a message

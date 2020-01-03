@@ -3,6 +3,7 @@ const db=require('../database/dbConfig.js');
  module.exports={
     findBooksByLenderId,
     findBookById,
+    findAllSameBooks,
     addBook,
     toggleAvailability,
     removeBook,
@@ -17,6 +18,10 @@ async function findBooksByLenderId(lenderId){
 // Find book by lender collection Id (primary key)
 async function findBookById(id){
     return db('lender_collection').where({id});
+}
+
+async function findAllSameBooks(id) {
+    return db('lender_collection').where({google_book_id: id});
 }
 
 // Create a book in lender collection

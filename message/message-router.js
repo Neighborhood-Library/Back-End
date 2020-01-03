@@ -20,15 +20,34 @@ router.get("/:id", async (req, res) => {
 });
 
 // READ BY book id
-router.get("/:google_book_id", async (req, res) => {
-  const { google_book_id } = req.params;
+// router.get("/:google_book_id", async (req, res) => {
+//   const { google_book_id } = req.params;
+
+//   try {
+//     const messageData = await messageModel.findMessagesByBookId(google_book_id);
+//     res.status(200).json(messageData);
+//   } catch (err) {
+//     res.status(500).json({
+//       message: `Failed to get message for the book id ${google_book_id}:` + err
+//     });
+//   }
+// });
+
+// GET all messages by transaction ID
+router.get("/tran/:trans_id", async (req, res) => {
+  const { tran_id } = req.params;
 
   try {
-    const messageData = await messageModel.findMessagesByBookId(google_book_id);
-    res.status(200).json(messageData);
+    const messages = await messageModel.findMessagesByTranId(tran_id);
+    
+    if (messages.length > 0) {
+      res.status(200).json(messages);
+    } else {
+      res.status(204).json({});
+    }
   } catch (err) {
     res.status(500).json({
-      message: `Failed to get message for the book id ${google_book_id}:` + err
+      message: `Error finding Transaction: ${google_book_id}<br>` + err
     });
   }
 });
