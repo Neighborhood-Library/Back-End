@@ -15,6 +15,21 @@ router.get('/:lender_id',async (req, res) => {
     }
   });
 
+// GET all books with same google id
+router.get('/book/:book_id', async (req, res) => {
+  const {book_id} = req.params;
+  
+  try {
+    const bookList = await lenderCollectionModel.findAllSameBooks(book_id);
+    
+    res.status(200).json(bookList);
+  } catch (err) {
+    res.status(500).json({
+      message: `Failed to retrieve the total amount of this book, ${book_id}`
+    });
+  }
+})
+
 // CREATE
 router.post('/', async (req, res) => {
   const lenderBookData = req.body;
