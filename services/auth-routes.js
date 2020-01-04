@@ -12,7 +12,6 @@ router.get('/google', passport.authenticate('google', {
 // gets user info back after log in
 router.get('/google/callback', passport.authenticate('google'),
     (req, res) => {
-        console.log(req.headers.cookie) ;
         res.redirect('/dashboard');
     }
 );
@@ -25,12 +24,12 @@ router.get('/logout', (req, res) => {
 
 // returns current user info
 router.get('/current_user', (req, res) => {
-    console.log(req.headers.cookie);
     if (req.user) {
         console.log(req.user[0].user_name + 'logged in');
         res.status(200).json({user: req.user});
     } else {
-        res.status(404).json({message: 'Bad user'});
+        // no user found, 204 to not have errors in client console
+        res.status(204).json({ message: 'no user found '});
     }
 });
 
