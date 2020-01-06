@@ -4,6 +4,18 @@ const lenderCollectionModel = require('../lender/lenderCollection-model.js');
 const borrowerWishlistModel = require('../borrower/borrowerWishlist-model.js');
 const router = express.Router();
 
+// get transaction by user ID and book ID, return only active
+router.get('/', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // check for transaction matching user ID and book ID
+    const transaction = await transactionModel.findTransactionById(id);
+  } catch(err) {
+    console.log(err);
+  }
+})
+
 //lend/borrow transaction
 router.post('/', async (req, res) => {
     const transactionData = req.body;
@@ -17,7 +29,7 @@ router.post('/', async (req, res) => {
           await lenderCollectionModel.toggleAvailability(bookFound);
         } else {
           res.status(404).json({ message: `Could not find available book for lender id ${transactionData.lender_id}` });
-        }
+        } 
     
         [bookFound] = await borrowerWishlistModel.findBookByBorrowerIdAndGoogleBookId(transactionData.borrower_id, transactionData.google_book_id, true);
 

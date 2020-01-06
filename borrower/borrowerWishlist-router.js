@@ -6,7 +6,7 @@ const router = express.Router();
 // READ
 router.get('/:borrower_id',async (req, res) => {
     const { borrower_id } = req.params;
-  
+
     try {
       const borrowerWishlistData = await borrowerWishlistModel.findBooksByBorrowerId(borrower_id);
       res.status(200).json(borrowerWishlistData);

@@ -4,7 +4,7 @@ exports.up = function(knex) {
         .createTable('users', users => {
             users.increments(); //Id
             //first name, last name, email, username, password Are what the registration form has so
-            //we need to add line 9 and 10:
+            //we need to add line 8 and 9:
             users.string('first_name', 255).notNullable();
             users.string('last_name', 255).notNullable();
             users.string('user_name', 255).notNullable().unique();//username
@@ -18,7 +18,6 @@ exports.up = function(knex) {
             tbl.integer('lender_id')
                 .references('id')
                 .inTable('users')
-                .onDelete('CASCADE')
                 .notNullable();
             tbl.string('isbn',128).notNullable();
             tbl.boolean('is_available').defaultTo(false).notNullable();
@@ -47,15 +46,33 @@ exports.up = function(knex) {
             .onDelete('CASCADE')
             .notNullable();
             tbl.string('google_book_id',255).notNullable();
-            tbl.string('isbn',128).notNullable();
             tbl.timestamp('borrow_time').defaultTo(knex.fn.now()).notNullable();
             tbl.timestamp('return_time'); //nullable - will be updated when lender makes book available again
+        })
+        .createTable('messages',tbl =>{
+            tbl.increments();
+            tbl.integer('transaction_id')
+               .references('id')
+               .inTable('transactions')
+               .notNullable();
+            tbl.integer('sender_id')
+               .references('id')
+               .inTable('users')
+               .notNullable();
+            // tbl.integer('receiver_id')
+            //    .references('id')
+            //    .inTable('users')
+            //    .notNullable();               
+            // tbl.string('message_type',255).notNullable(); //BORROW_REQUEST, BORROW_RESPONSE_OK, OTHER
+            tbl.string('content',1024).notNullable();
+            tbl.timestamp('message_time').defaultTo(knex.fn.now()).notNullable();
         });
 };
 
 exports.down = function(knex) {
     return knex
     .schema
+    .dropTableIfExists('messages')
     .dropTableIfExists('transactions')
     .dropTableIfExists('borrower_wishlist') 
     .dropTableIfExists('lender_collection')

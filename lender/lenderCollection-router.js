@@ -78,7 +78,7 @@ router.put('/:id', async (req, res) => {
 
     if (bookFound) {
       const lenderCollectionData = await lenderCollectionModel.toggleAvailability(bookFound);
-      res.status(200).json(lenderCollectionData );
+      res.status(200).json(lenderCollectionData);
     } else {
       res.status(404).json({ message: `Could not find book for lender collection id ${id}` });
     }

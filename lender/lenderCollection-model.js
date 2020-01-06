@@ -21,7 +21,19 @@ async function findBookById(id){
 }
 
 async function findAllSameBooks(id) {
-    return db('lender_collection').where({google_book_id: id});
+    const allBooks = await db('lender_collection').where({google_book_id: id});
+
+    console.log(allBooks);
+
+    if (allBooks.length <= 0) {
+        return [];
+    } else {
+        const activeBooks = allBooks.filter(book => book.is_available === true);
+
+        console.log(activeBooks);
+    
+        return activeBooks;
+    }
 }
 
 // Create a book in lender collection

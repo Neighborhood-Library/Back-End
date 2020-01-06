@@ -29,15 +29,16 @@ passport.use('local.login', new LocalStrategy({
     console.log('local-login username', username);
 
     const user = await db('users').where({user_name: username});
-
-    console.log('local-login', user);
       
     if (user.length <= 0) {
+      console.log('user not found');
       return done(null, false);
       // , req.flash('loginMessage', 'incorrect username')
     } else if (bcrypt.compare(password, user[0].user_credential)) {
+      console.log('password verified');
       return done(null, user);
     } else {
+      console.log('incorrect password');
       return done(null, false);
       //, req.flash('loginMessage', 'incorrect password')
     }
@@ -62,17 +63,18 @@ passport.use('local.register', new LocalStrategy({
       console.log('username taken');
       return done(null, false, req.flash('registerMessage', 'username is already taken'));
     } else {
+      console.log(req.body);
       const { first_name, last_name, user_email } = req.body;
       const hash = bcrypt.hashSync(password, 10);
       const cred = hash;
       const newUser = await db('users').insert(
-        {user_name: username, user_email, user_identity: 'muoVivlio', user_credential: cred})
+        {first_name, last_name, user_name: username, user_email, user_identity: 'muoVivlio', user_credential: cred})
         .then(async () => {
           console.log('returning new user');
           return await db('users').where({user_name: username});
         })
         .catch(err => {
-          console.log(err.detail, 'passportLocal-70');
+          console.log(err, 'passportLocal-70');
         });
         
       return done(null, newUser);  

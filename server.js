@@ -11,7 +11,8 @@ const lenderRouter= require('./lender/lenderCollection-router.js');
 const borrowerRouter= require('./borrower/borrowerWishlist-router.js');
 const authRouter = require('./services/auth-routes.js');
 const usersRouter = require('./users/user-routes.js');
-const transactionRouter=require('./transaction/transaction-router.js');
+const transactionRouter = require('./transaction/transaction-router.js');
+const messageRouter = require('./message/message-router.js')
 const chatRouter = require('./chat/chat-router.js');
 
 //middleware to all routers to ensure they are protected. DO NOT USE ON AUTHROUTER.  Was added to borrowerRouter, and lenderRouter.
@@ -19,7 +20,7 @@ function protectedRoute(req, res, next) {
   if (req.isAuthenticated()) {
     return next(null);
   } else {
-    res.redirect('/login');
+    res.redirect('/login'); 
   }
 }
 
@@ -44,11 +45,11 @@ server.use(function(req, res, next){
 
 server.use('/auth', authRouter);
 server.use('/api/chat', chatRouter);
-server.use('/api/lender-collection', protectedRoute,  lenderRouter);
+server.use('/api/lender-collection', protectedRoute, lenderRouter);
 server.use('/api/borrower-wishlist', protectedRoute, borrowerRouter);
 server.use('/api/users', protectedRoute, usersRouter);
 server.use('/api/transaction', protectedRoute, transactionRouter);
-
+server.use('/api/message', protectedRoute, messageRouter);
 
 server.get('/', (req, res) => {
   res.status(200).json("Welcome to the muoVivlio, your peer-to-peer neighboor library.");
