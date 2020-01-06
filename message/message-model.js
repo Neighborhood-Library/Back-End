@@ -18,8 +18,8 @@ async function findMessagesByBookId(google_book_id){
 }
 
 // Find messages by transaction id
-async function findMessagesByTranId(tran_id){
-    return db('messages').where({tran_id});
+async function findMessagesByTranId(transaction_id){
+    return db('messages').where({transaction_id});
 }
 
 // Create a message

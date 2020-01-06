@@ -8,7 +8,13 @@ module.exports = {
 
 // Find transaction for a given id
 async function findTransactionById(id) {
-  return db("transactions").where({ id });
+  const transactions = await db("transactions").where({ id });
+
+  if (transactions.length > 1) {
+    transactions.reduce(tran => tran.return_time !== null);
+  } else {
+    return transactions;
+  }
 }
 
 // Add a transaction history

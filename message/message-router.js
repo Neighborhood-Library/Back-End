@@ -34,11 +34,11 @@ router.get("/:id", async (req, res) => {
 // });
 
 // GET all messages by transaction ID
-router.get("/tran/:trans_id", async (req, res) => {
-  const { tran_id } = req.params;
+router.get("/tran/:transaction_id", async (req, res) => {
+  const { transaction_id } = req.params;
 
   try {
-    const messages = await messageModel.findMessagesByTranId(tran_id);
+    const messages = await messageModel.findMessagesByTranId(transaction_id);
     
     if (messages.length > 0) {
       res.status(200).json(messages);

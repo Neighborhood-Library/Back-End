@@ -45,7 +45,7 @@ server.use(function(req, res, next){
 
 server.use('/auth', authRouter);
 server.use('/api/chat', chatRouter);
-server.use('/api/lender-collection', protectedRoute,  lenderRouter);
+server.use('/api/lender-collection', protectedRoute, lenderRouter);
 server.use('/api/borrower-wishlist', protectedRoute, borrowerRouter);
 server.use('/api/users', protectedRoute, usersRouter);
 server.use('/api/transaction', protectedRoute, transactionRouter);

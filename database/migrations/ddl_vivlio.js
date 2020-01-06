@@ -31,23 +31,7 @@ exports.up = function(knex) {
                .notNullable();
              tbl.string('isbn',128).notNullable();
              tbl.boolean('request_to_borrow').defaultTo(false).notNullable();
-        })
-        .createTable('messages',tbl =>{
-            tbl.increments();
-            tbl.string('google_book_id',255).notNullable();
-            tbl.integer('sender_id')
-               .references('id')
-               .inTable('users')
-               .notNullable();
-            tbl.integer('receiver_id')
-               .references('id')
-               .inTable('users')
-               .notNullable();               
-            tbl.string('message_type',255).notNullable(); //BORROW_REQUEST, BORROW_RESPONSE_OK, OTHER
-            tbl.string('content',1024).notNullable();
-            tbl.timestamp('message_time').defaultTo(knex.fn.now()).notNullable();
-        })
-        
+        })        
        .createTable('transactions',tbl =>{
             tbl.increments();        
             tbl.integer('borrower_id')
@@ -58,21 +42,35 @@ exports.up = function(knex) {
                .references('id')
                .inTable('users')
                .notNullable();
-            tbl.integer('message_id')
-               .references('id')
-               .inTable('messages')
-               .notNullable();
             tbl.string('google_book_id',255).notNullable();
             tbl.timestamp('borrow_time').defaultTo(knex.fn.now()).notNullable();
             tbl.timestamp('return_time'); //nullable - will be updated when lender makes book available again
+        })
+        .createTable('messages',tbl =>{
+            tbl.increments();
+            tbl.integer('transaction_id')
+               .references('id')
+               .inTable('transactions')
+               .notNullable();
+            tbl.integer('sender_id')
+               .references('id')
+               .inTable('users')
+               .notNullable();
+            // tbl.integer('receiver_id')
+            //    .references('id')
+            //    .inTable('users')
+            //    .notNullable();               
+            // tbl.string('message_type',255).notNullable(); //BORROW_REQUEST, BORROW_RESPONSE_OK, OTHER
+            tbl.string('content',1024).notNullable();
+            tbl.timestamp('message_time').defaultTo(knex.fn.now()).notNullable();
         });
 };
 
 exports.down = function(knex) {
     return knex
     .schema
-    .dropTableIfExists('transactions')
     .dropTableIfExists('messages')
+    .dropTableIfExists('transactions')
     .dropTableIfExists('borrower_wishlist') 
     .dropTableIfExists('lender_collection')
     .dropTableIfExists('users');
