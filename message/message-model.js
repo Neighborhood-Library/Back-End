@@ -24,8 +24,8 @@ async function findMessagesByTranId(transaction_id){
 
 // Create a message
 async function addMessage(message){
-    const [id] = await db('messages').insert(message).returning('id');
-    return findMessageById(id);
+    /*const [id] =*/ return await db('messages').insert(message).returning('id');
+    // return findMessageById(id);
 }
 
 
