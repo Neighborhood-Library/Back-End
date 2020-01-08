@@ -53,72 +53,86 @@ router.get("/tran/:transaction_id", async (req, res) => {
 });
 
 // CREATE
+// router.post("/", async (req, res) => {
+//   const messageData = req.body;
+
+//   try {
+//     // STEP 1: ADD MESSAGE
+//     const [addedMessage] = await messageModel.addMessage(messageData);
+
+//     // if message sent is of type BORROW_RESPONSE_OK, then lender has accepted borrower's request
+    // (book is lent) and we can create a transaction
+//     if ("BORROW_RESPONSE_OK" === addedMessage.message_type) {
+//       const transactionData = {
+//         borrower_id: addedMessage.receiver_id,
+//         lender_id: addedMessage.sender_id,
+//         message_id: addedMessage.id,
+//         google_book_id: addedMessage.google_book_id,
+//         borrow_time: addedMessage.message_time
+//       };
+
+//       try {
+//         // STEP 2: ADD TRANSACTION
+//         const newTransaction = await transactionModel.addTransaction(transactionData);
+
+//         // STEP 3: MAKE BOOK UNAVAILABLE IN LENDER COLLECTION
+//         let [bookFound] = await lenderCollectionModel.findBookByLenderIdAndGoogleBookId(
+//           transactionData.lender_id,
+//           transactionData.google_book_id,
+//           true
+//         );
+
+//         if (bookFound) {
+//           await lenderCollectionModel.toggleAvailability(bookFound);
+//         } else {
+//           res
+//             .status(404)
+//             .json({
+//               message: `Could not find available book for lender id ${transactionData.lender_id}`
+//             });
+//         }
+
+//         // STEP 4: UPDATE BORROWER WISHLIST - BORROWER IS NOT LOOKING TO BORROW THIS BOOK ANYMORE
+//         [bookFound] = await borrowerWishlistModel.findBookByBorrowerIdAndGoogleBookId(
+//           transactionData.borrower_id,
+//           transactionData.google_book_id,
+//           true
+//         );
+
+//         if (bookFound) {
+//           await borrowerWishlistModel.toggleRequestToBorrow(bookFound);
+//         } else {
+//           res
+//             .status(404)
+//             .json({message: `Could not find book for borrower id ${transactionData.borrower_id}`});
+//         }
+
+//         res.status(201).json(newTransaction);
+//       } catch (err) {
+//         res
+//           .status(500)
+//           .json({ message: "Failed to add a new transaction:" + err });
+//       }
+//     } else {
+//       res.status(201).json(addedMessage);
+//     }
+//   } catch (err) {
+//     res.status(500).json({ message: "Failed to create new message:" + err });
+//   }
+// });
+
 router.post("/", async (req, res) => {
   const messageData = req.body;
 
   try {
     // STEP 1: ADD MESSAGE
     const [addedMessage] = await messageModel.addMessage(messageData);
+    res.status(200).json({addedMessage});
 
-    // if message sent is of type BORROW_RESPONSE_OK, then lender has accepted borrower's request
-    // (book is lent) and we can create a transaction
-    if ("BORROW_RESPONSE_OK" === addedMessage.message_type) {
-      const transactionData = {
-        borrower_id: addedMessage.receiver_id,
-        lender_id: addedMessage.sender_id,
-        message_id: addedMessage.id,
-        google_book_id: addedMessage.google_book_id,
-        borrow_time: addedMessage.message_time
-      };
-
-      try {
-        // STEP 2: ADD TRANSACTION
-        const newTransaction = await transactionModel.addTransaction(transactionData);
-
-        // STEP 3: MAKE BOOK UNAVAILABLE IN LENDER COLLECTION
-        let [bookFound] = await lenderCollectionModel.findBookByLenderIdAndGoogleBookId(
-          transactionData.lender_id,
-          transactionData.google_book_id,
-          true
-        );
-
-        if (bookFound) {
-          await lenderCollectionModel.toggleAvailability(bookFound);
-        } else {
-          res
-            .status(404)
-            .json({
-              message: `Could not find available book for lender id ${transactionData.lender_id}`
-            });
-        }
-
-        // STEP 4: UPDATE BORROWER WISHLIST - BORROWER IS NOT LOOKING TO BORROW THIS BOOK ANYMORE
-        [bookFound] = await borrowerWishlistModel.findBookByBorrowerIdAndGoogleBookId(
-          transactionData.borrower_id,
-          transactionData.google_book_id,
-          true
-        );
-
-        if (bookFound) {
-          await borrowerWishlistModel.toggleRequestToBorrow(bookFound);
-        } else {
-          res
-            .status(404)
-            .json({message: `Could not find book for borrower id ${transactionData.borrower_id}`});
-        }
-
-        res.status(201).json(newTransaction);
-      } catch (err) {
-        res
-          .status(500)
-          .json({ message: "Failed to add a new transaction:" + err });
-      }
-    } else {
-      res.status(201).json(addedMessage);
-    }
   } catch (err) {
     res.status(500).json({ message: "Failed to create new message:" + err });
   }
 });
+
 
 module.exports = router;
