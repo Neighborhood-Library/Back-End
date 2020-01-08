@@ -25,23 +25,23 @@ router.post('/', async (req, res) => {
     try {
         const newTransaction = await transactionModel.addTransaction(transactionData);
 
-        let [bookFound] = await lenderCollectionModel.findBookByLenderIdAndGoogleBookId(transactionData.lender_id, transactionData.google_book_id, true);
+        // let [bookFound] = await lenderCollectionModel.findBookByLenderIdAndGoogleBookId(transactionData.lender_id, transactionData.google_book_id, true);
 
-        if (bookFound) {
-          await lenderCollectionModel.toggleAvailability(bookFound);
-        } else {
-          res.status(404).json({ message: `Could not find available book for lender id ${transactionData.lender_id}` });
-        } 
+        // if (bookFound) {
+        //   await lenderCollectionModel.toggleAvailability(bookFound);
+        // } else {
+        //   res.status(404).json({ message: `Could not find available book for lender id ${transactionData.lender_id}` });
+        // } 
     
-        [bookFound] = await borrowerWishlistModel.findBookByBorrowerIdAndGoogleBookId(transactionData.borrower_id, transactionData.google_book_id, true);
+        // [bookFound] = await borrowerWishlistModel.findBookByBorrowerIdAndGoogleBookId(transactionData.borrower_id, transactionData.google_book_id, true);
 
-        if (bookFound) {
-          await borrowerWishlistModel.toggleRequestToBorrow(bookFound);
-        } else {
-          res.status(404).json({ message: `Could not find book for borrower id ${transactionData.borrower_id}` });
-        }
+        // if (bookFound) {
+        //   await borrowerWishlistModel.toggleRequestToBorrow(bookFound);
+        // } else {
+        //   res.status(404).json({ message: `Could not find book for borrower id ${transactionData.borrower_id}` });
+        // }
     
-        res.status(201).json(newTransaction);
+        res.status(201).json({ message: newTransaction[0] });
     } catch (err) {
         res.status(500).json({ message: 'Failed to add a new transaction:' + err });
     }
