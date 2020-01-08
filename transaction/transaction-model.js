@@ -8,11 +8,13 @@ module.exports = {
 
 // Find transaction for a given id
 async function findTransactionById(lender_id, google_book_id) {
+  // get books where lender id and google book id match
   const transactions = await db("transactions").where({ lender_id, google_book_id });
 
   console.log(transactions);
 
   if (transactions.length > 1) {
+    // return all available books, not returned yet
     transactions.reduce(tran => tran.return_time !== null);
   } else {
     return transactions;
