@@ -15,9 +15,9 @@ async function findTransactionById(lender_id, google_book_id) {
 
   if (transactions.length > 1) {
     // return all available books, not returned yet
-    transactions.reduce(tran => tran.return_time !== null);
+    return transactions.reduce(tran => tran.return_time !== null);
   } else {
-    return transactions;
+    return [];
   }
 }
 

@@ -12,7 +12,7 @@ router.get('/:lender&:book', async (req, res) => {
     // check for transaction matching user ID and book ID
     const transaction = await transactionModel.findTransactionById(lender, google_book);
 
-    res.status(200).json({transaction});
+    res.status(200).send(transaction['transaction_id']);
   } catch(err) {
     console.log(err);
   }
