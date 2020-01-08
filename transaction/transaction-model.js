@@ -7,8 +7,10 @@ module.exports = {
 };
 
 // Find transaction for a given id
-async function findTransactionById(id) {
-  const transactions = await db("transactions").where({ id });
+async function findTransactionById(lender_id, google_book_id) {
+  const transactions = await db("transactions").where({ lender_id, google_book_id });
+
+  console.log(transactions);
 
   if (transactions.length > 1) {
     transactions.reduce(tran => tran.return_time !== null);
