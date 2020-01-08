@@ -63,7 +63,8 @@ exports.up = function(knex) {
             //    .references('id')
             //    .inTable('users')
             //    .notNullable();               
-            // tbl.string('message_type',255).notNullable(); //BORROW_REQUEST, BORROW_RESPONSE_OK, OTHER
+            // tbl.string('message_type',255).notNullable(); 
+            //BORROW_REQUEST, BORROW_RESPONSE_OK, OTHER
             tbl.string('content',1024).notNullable();
             tbl.timestamp('message_time').defaultTo(knex.fn.now()).notNullable();
         });
