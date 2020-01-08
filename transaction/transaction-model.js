@@ -7,18 +7,32 @@ module.exports = {
 };
 
 // Find transaction for a given id
-async function findTransactionById(lender_id, google_book_id) {
-  // get books where lender id and google book id match
-  const transactions = await db("transactions").where({ lender_id, google_book_id });
+async function findTransactionById(user_id, google_book_id) {
 
-  console.log(transactions);
+  // get books where lender id and google book id are found
+  const lendTransactions = await db("transactions").where({ lender_id: user_id, google_book_id });
 
-  if (transactions.length > 1) {
-    // return all available books, not returned yet
-    return transactions.reduce(tran => tran.return_time !== null);
+  console.log(lendTransactions);
+
+  if (lendTransactions === []) {
+    // if lender transaction does not match, check with borrower id
+    const borrTransactions = await db("transactions").where({ borrower_id: user_id, google_book_id});
+
+    return filterReturn(borrTransactions);
   } else {
-    return [];
+    // if lender transaction does match
+    return filterReturn(lendTransactions);
   }
+
+  function filterReturn(transactions) {
+    if (transactions.length > 0) {
+      // return all available books, not returned yet
+      return transactions.filter(trans => trans.return_time === null)[0];
+    } else {
+      return [];
+    }
+  }
+
 }
 
 // Add a transaction history
@@ -41,7 +55,7 @@ async function addTransaction(transaction) {
     const id = await db("transactions").insert(transaction).returning('id');
     // get new transcation info
     const newTransaction = await db("transactions").where('id');
-    
+
     return newTransaction;
   }
 }

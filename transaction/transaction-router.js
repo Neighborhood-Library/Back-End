@@ -6,13 +6,13 @@ const router = express.Router();
 
 // get transaction by user ID and book ID, return only active
 router.get('/:lender&:book', async (req, res) => {
-  const { lender, google_book } = req.params;
+  const { lender, book } = req.params;
 
   try {
     // check for transaction matching user ID and book ID
-    const transaction = await transactionModel.findTransactionById(lender, google_book);
+    const transaction = await transactionModel.findTransactionById(lender, book);
 
-    res.status(200).send(transaction['transaction_id']);
+    res.status(200).send({message: transaction});
   } catch(err) {
     console.log(err);
   }
@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
         //   res.status(404).json({ message: `Could not find book for borrower id ${transactionData.borrower_id}` });
         // }
     
-        res.status(201).json({ message: newTransaction[0] });
+        res.status(201).json({ message: newTransaction });
     } catch (err) {
         res.status(500).json({ message: 'Failed to add a new transaction:' + err });
     }
