@@ -5,12 +5,12 @@ const borrowerWishlistModel = require('../borrower/borrowerWishlist-model.js');
 const router = express.Router();
 
 // get transaction by user ID and book ID, return only active
-router.get('/:lender&:book', async (req, res) => {
-  const { lender, book } = req.params;
+router.get('/:user&:book', async (req, res) => {
+  const { user, book } = req.params;
 
   try {
     // check for transaction matching user ID and book ID
-    const transaction = await transactionModel.findTransactionById(lender, book);
+    const transaction = await transactionModel.findTransactionById(user, book);
 
     res.status(200).send({message: transaction});
   } catch(err) {

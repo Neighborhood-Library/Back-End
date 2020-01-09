@@ -39,6 +39,8 @@ router.get("/tran/:transaction_id", async (req, res) => {
 
   try {
     const messages = await messageModel.findMessagesByTranId(transaction_id);
+
+    console.log(messages);
     
     if (messages.length > 0) {
       res.status(200).json(messages);
