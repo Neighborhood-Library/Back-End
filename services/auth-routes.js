@@ -24,6 +24,7 @@ router.get('/logout', (req, res) => {
 
 // returns current user info
 router.get('/current_user', (req, res) => {
+    console.log(req.user);
     if (req.user && req.user.length > 0) {
         console.log(req.user[0].user_name + 'logged in');
         res.status(200).json({user: req.user});
