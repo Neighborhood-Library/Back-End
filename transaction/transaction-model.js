@@ -1,13 +1,14 @@
 const db = require("../database/dbConfig.js");
 
 module.exports = {
+  findTransaction,
   findTransactionById,
   addTransaction,
   updateReturnTime
 };
 
 // Find transaction for a given id
-async function findTransactionById(user_id, google_book_id) {
+async function findTransaction(user_id, google_book_id) {
 
   // get books where lender id and google book id are found
   const lendTransactions = await db("transactions").where({ lender_id: user_id, google_book_id });
@@ -30,7 +31,10 @@ async function findTransactionById(user_id, google_book_id) {
       return [];
     }
   }
+}
 
+async function findTransactionById(id) {
+  return await db("transactions").where({ id });
 }
 
 // Add a transaction history
