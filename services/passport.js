@@ -18,7 +18,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser( async (id, done) => {  
     console.log('deserialize user id', id);
 
-    const User = await db('users').where({user_credential: id});
+    const User = await db('users').where({id: id});
 
     console.log('passport.js line 21', User);
     
