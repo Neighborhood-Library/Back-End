@@ -33,9 +33,9 @@ server.use(flash());
 server.use(
   cookieSession({
       maxAge: 30 * 24 * 60 * 60 * 1000,
-      keys: [process.env.cookieKey],
+      keys: [process.env.cookieKey]
       // secure: true,
-      sameSite: 'lax'
+      //sameSite: 'lax'
   })
 );
 server.use(passport.initialize());
