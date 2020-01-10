@@ -12,7 +12,7 @@ router.get('/google', passport.authenticate('google', {
 // gets user info back after log in
 router.get('/google/callback', passport.authenticate('google'),
     (req, res) => {
-        res.redirect('/dashboard');
+        res.redirect(`/dashboard`);
     }
 );
 

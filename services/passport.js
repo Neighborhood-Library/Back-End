@@ -45,7 +45,7 @@ passport.use(
         if (user.length > 0) {
             console.log('user:',user);
             return done(null, user);
-        };
+        }
      
         let newUser = await addNewUser(profile);
       

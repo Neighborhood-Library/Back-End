@@ -82,13 +82,3 @@ passport.use('local.register', new LocalStrategy({
     
   }
 ));
-
-
-
-
-
-  
-
-
-
- 

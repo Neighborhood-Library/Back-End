@@ -7,13 +7,15 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const flash = require('connect-flash');
 
-const lenderRouter= require('./lender/lenderCollection-router.js');
-const borrowerRouter= require('./borrower/borrowerWishlist-router.js');
+const lenderRouter = require('./lender/lenderCollection-router.js');
+const borrowerRouter = require('./borrower/borrowerWishlist-router.js');
 const authRouter = require('./services/auth-routes.js');
 const usersRouter = require('./users/user-routes.js');
 const transactionRouter = require('./transaction/transaction-router.js');
 const messageRouter = require('./message/message-router.js')
 const chatRouter = require('./chat/chat-router.js');
+
+const messageModel = require('./message/message-model.js');
 
 //middleware to all routers to ensure they are protected. DO NOT USE ON AUTHROUTER.  Was added to borrowerRouter, and lenderRouter.
 function protectedRoute(req, res, next) {
@@ -51,8 +53,22 @@ server.use('/api/users', protectedRoute, usersRouter);
 server.use('/api/transaction', protectedRoute, transactionRouter);
 server.use('/api/message', protectedRoute, messageRouter);
 
+const phrase = '<h1>Post requests are not allowed here</h1>';
+
+server.post('/', (req, res) => {
+  res.send(phrase);
+});
+
+server.put('/', (req, res) => {
+  res.send(phrase);
+});
+
+server.delete('/', (req, res) => {
+  res.send(phrase);
+});
+
 server.get('/', (req, res) => {
-  res.status(200).json("Welcome to the muoVivlio, your peer-to-peer neighboor library.");
+  res.status(200).json("Welcome to the muoVivlio, your peer-to-peer neighbor library.");
 });
 
 const app = http.createServer(server);
@@ -61,11 +77,19 @@ const io = require('socket.io')(app);
 io.on('connection', (socket) => {
   // console.log(socket.id);
 
-  socket.on('message', (msg) => {
+  socket.on('message', async (msg) => {
+    console.log(msg);
+
+    const id = await messageModel.addMessage(msg);
+
+    console.log(id);
+
     socket.emit('retMsg', {
       text: msg,
       name: 'Rick'
     });
+
+    socket.broadcast.emit('update');
   });
 
 });
