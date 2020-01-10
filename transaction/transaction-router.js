@@ -11,7 +11,7 @@ router.get('/:user&:book', async (req, res) => {
   try {
     // check for transaction matching user ID and book ID
     const transaction = await transactionModel.findTransaction(user, book);
-
+ 
     res.status(200).send({message: transaction});
   } catch(err) {
     console.log(err);
