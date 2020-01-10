@@ -1,5 +1,6 @@
 const express = require('express');
 const lenderCollectionModel = require('./lenderCollection-model.js');
+const transactionModel = require('../transaction/transaction-model.js');
 
 const router = express.Router();
 
@@ -72,11 +73,20 @@ router.put('/:id', async (req, res) => {
 
   try {
     const [bookFound] = await lenderCollectionModel.findBookById(id);
+    console.log('bookFound', bookFound)
+
+    //checks if book has transaction open for user
+    // const getTrans = await transactionModel.findTransaction(bookFound.id, bookFound.google_book_id);
 
     if (bookFound) {
       const lenderCollectionData = await lenderCollectionModel.toggleAvailability(bookFound);
       res.status(200).json(lenderCollectionData);
-    } else {
+    }
+    // else if (getTrans.length > 0) {
+    //   res.status(204).json({ message: 'Transcation found for book' });
+    // } 
+    else {
+      console.log('fail conditional line 85');
       res.status(404).json({ message: `Could not find book for lender collection id ${id}` });
     }
   } catch (err) {

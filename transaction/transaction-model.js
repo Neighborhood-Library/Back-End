@@ -47,18 +47,30 @@ async function addTransaction(transaction) {
     google_book_id: transaction.google_book_id
   });
 
+  console.log('findDupTrans',findDupTrans);
+
+  async function insertTranscation() {
+    // insert transaction
+    const id = await db("transactions").insert(transaction).returning('id');
+    // get new transcation info
+    const newTransaction = await db("transactions").where([id]);
+
+    return newTransaction;
+  }
+
   if (findDupTrans.length > 0) {
     //loop through for active transactions for non-returned books
     const openTrans = findDupTrans.filter(trans => trans.return_time === null);
 
-    return openTrans;
+    console.log('openTrans',openTrans);
+    
+    if (openTrans.length > 0) {
+      return openTrans;
+    } else {
+      insertTranscation();
+    }
   } else {
-    // insert transaction
-    const id = await db("transactions").insert(transaction).returning('id');
-    // get new transcation info
-    const newTransaction = await db("transactions").where('id');
-
-    return newTransaction;
+    insertTranscation();
   }
 }
 
