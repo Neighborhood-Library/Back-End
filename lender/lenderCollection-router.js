@@ -35,19 +35,16 @@ router.post('/', async (req, res) => {
   const lenderBookData = req.body;
 
   try {
-    // gets all user books
+    // gets all single lender's books
     const bookList = await lenderCollectionModel.findBooksByLenderId(req.body.lender_id);
 
-    // sorts out google book ID
+    // sorts out req google book ID
     const bookIDs = [];
     bookList.forEach(book => {
       bookIDs.push(book.google_book_id);
     });
 
-    console.log(bookIDs.find(el => {
-      return el === lenderBookData.google_book_id
-    }));
-
+    // find matching book
     const findBook = () => {
       return bookIDs.find(el => {
         return el === lenderBookData.google_book_id

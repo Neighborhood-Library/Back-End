@@ -21,11 +21,13 @@ router.get('/:user&:book', async (req, res) => {
 //lend/borrow transaction
 router.post('/', async (req, res) => {
     const transactionData = req.body;
+    console.log(req.body);
 
     try {
         const newTransaction = await transactionModel.addTransaction(transactionData);
 
-        // let [bookFound] = await lenderCollectionModel.findBookByLenderIdAndGoogleBookId(transactionData.lender_id, transactionData.google_book_id, true);
+        let [bookFound] = await lenderCollectionModel.findBookByLenderIdAndGoogleBookId(transactionData.lender_id, transactionData.google_book_id, true);
+        console.log(bookFound);
 
         // if (bookFound) {
         //   await lenderCollectionModel.toggleAvailability(bookFound);

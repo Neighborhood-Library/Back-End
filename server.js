@@ -33,9 +33,9 @@ server.use(flash());
 server.use(
   cookieSession({
       maxAge: 30 * 24 * 60 * 60 * 1000,
-      keys: [process.env.cookieKey],
+      keys: [process.env.cookieKey]
       // secure: true,
-      sameSite: 'lax'
+      // sameSite: 'lax'
   })
 );
 server.use(passport.initialize());
@@ -75,18 +75,14 @@ const app = http.createServer(server);
 const io = require('socket.io')(app);
 
 io.on('connection', (socket) => {
-  // console.log(socket.id);
 
   socket.on('message', async (msg) => {
     console.log(msg);
 
-    const id = await messageModel.addMessage(msg);
-
-    console.log(id);
+    const newMessage = await messageModel.addMessage(msg);
 
     socket.emit('retMsg', {
-      text: msg,
-      name: 'Rick'
+      text: newMessage
     });
 
     socket.broadcast.emit('update');

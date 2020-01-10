@@ -47,7 +47,7 @@ router.get("/tran/:transaction_id", async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({
-      message: `Error finding Transaction: ${google_book_id}<br>` + err
+      message: `Error finding Transaction` + err
     });
   }
 });
