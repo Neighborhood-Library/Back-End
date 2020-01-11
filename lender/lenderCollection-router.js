@@ -73,14 +73,15 @@ router.put('/:id', async (req, res) => {
 
   try {
     const [bookFound] = await lenderCollectionModel.findBookById(id);
-    console.log('bookFound', bookFound)
+    console.log('bookFound', bookFound);
 
     //checks if book has transaction open for user
     // const getTrans = await transactionModel.findTransaction(bookFound.id, bookFound.google_book_id);
 
     if (bookFound) {
-      const lenderCollectionData = await lenderCollectionModel.toggleAvailability(bookFound);
-      res.status(200).json(lenderCollectionData);
+      const [lenderCollectionData] = await lenderCollectionModel.toggleAvailability(bookFound);
+
+      res.status(200).json({lenderCollectionData});
     }
     // else if (getTrans.length > 0) {
     //   res.status(204).json({ message: 'Transcation found for book' });

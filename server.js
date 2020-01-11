@@ -40,10 +40,10 @@ server.use(
 );
 server.use(passport.initialize());
 server.use(passport.session());
-server.use(function(req, res, next){
-  console.log(`${req.method} from ${req.headers['referer']}`);
-  next();
-});
+// server.use(function(req, res, next){
+//   console.log(`${req.method} from ${req.headers['referer']}`);
+//   next();
+// });
 
 server.use('/auth', authRouter);
 server.use('/api/chat', chatRouter);

@@ -47,8 +47,6 @@ async function addTransaction(transaction) {
     google_book_id: transaction.google_book_id
   });
 
-  console.log('findDupTrans',findDupTrans);
-
   async function insertTranscation() {
     // insert transaction
     const id = await db("transactions").insert(transaction).returning('id');
@@ -61,8 +59,6 @@ async function addTransaction(transaction) {
   if (findDupTrans.length > 0) {
     //loop through for active transactions for non-returned books
     const openTrans = findDupTrans.filter(trans => trans.return_time === null);
-
-    console.log('openTrans',openTrans);
     
     if (openTrans.length > 0) {
       return openTrans;
