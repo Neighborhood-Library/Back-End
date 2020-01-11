@@ -1,5 +1,6 @@
 const express = require('express');
 const lenderCollectionModel = require('./lenderCollection-model.js');
+const transactionModel = require('../transaction/transaction-model.js');
 
 const router = express.Router();
 
@@ -35,19 +36,16 @@ router.post('/', async (req, res) => {
   const lenderBookData = req.body;
 
   try {
-    // gets all user books
+    // gets all single lender's books
     const bookList = await lenderCollectionModel.findBooksByLenderId(req.body.lender_id);
 
-    // sorts out google book ID
+    // sorts out req google book ID
     const bookIDs = [];
     bookList.forEach(book => {
       bookIDs.push(book.google_book_id);
     });
 
-    console.log(bookIDs.find(el => {
-      return el === lenderBookData.google_book_id
-    }));
-
+    // find matching book
     const findBook = () => {
       return bookIDs.find(el => {
         return el === lenderBookData.google_book_id
@@ -75,11 +73,21 @@ router.put('/:id', async (req, res) => {
 
   try {
     const [bookFound] = await lenderCollectionModel.findBookById(id);
+    console.log('bookFound', bookFound);
+
+    //checks if book has transaction open for user
+    // const getTrans = await transactionModel.findTransaction(bookFound.id, bookFound.google_book_id);
 
     if (bookFound) {
-      const lenderCollectionData = await lenderCollectionModel.toggleAvailability(bookFound);
-      res.status(200).json(lenderCollectionData);
-    } else {
+      const [lenderCollectionData] = await lenderCollectionModel.toggleAvailability(bookFound);
+
+      res.status(200).json({lenderCollectionData});
+    }
+    // else if (getTrans.length > 0) {
+    //   res.status(204).json({ message: 'Transcation found for book' });
+    // } 
+    else {
+      console.log('fail conditional line 85');
       res.status(404).json({ message: `Could not find book for lender collection id ${id}` });
     }
   } catch (err) {

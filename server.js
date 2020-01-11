@@ -35,15 +35,15 @@ server.use(
       maxAge: 30 * 24 * 60 * 60 * 1000,
       keys: [process.env.cookieKey]
       // secure: true,
-      //sameSite: 'lax'
+      // sameSite: 'lax'
   })
 );
 server.use(passport.initialize());
 server.use(passport.session());
-server.use(function(req, res, next){
-  console.log(`${req.method} from ${req.headers['referer']}`);
-  next();
-});
+// server.use(function(req, res, next){
+//   console.log(`${req.method} from ${req.headers['referer']}`);
+//   next();
+// });
 
 server.use('/auth', authRouter);
 server.use('/api/chat', chatRouter);
@@ -75,18 +75,14 @@ const app = http.createServer(server);
 const io = require('socket.io')(app);
 
 io.on('connection', (socket) => {
-  // console.log(socket.id);
 
   socket.on('message', async (msg) => {
     console.log(msg);
 
-    const id = await messageModel.addMessage(msg);
-
-    console.log(id);
+    const newMessage = await messageModel.addMessage(msg);
 
     socket.emit('retMsg', {
-      text: msg,
-      name: 'Rick'
+      text: newMessage
     });
 
     socket.broadcast.emit('update');

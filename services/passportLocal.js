@@ -26,19 +26,14 @@ passport.use('local.login', new LocalStrategy({
   passReqToCallback: true,
 },
   async function(req, username, password, done) {
-    console.log('local-login username', username);
-
     const user = await db('users').where({user_name: username});
       
     if (user.length <= 0) {
-      console.log('user not found');
       return done(null, false);
       // , req.flash('loginMessage', 'incorrect username')
     } else if (bcrypt.compare(password, user[0].user_credential)) {
-      console.log('password verified');
       return done(null, user);
     } else {
-      console.log('incorrect password');
       return done(null, false);
       //, req.flash('loginMessage', 'incorrect password')
     }
@@ -63,7 +58,6 @@ passport.use('local.register', new LocalStrategy({
       console.log('username taken');
       return done(null, false, req.flash('registerMessage', 'username is already taken'));
     } else {
-      console.log(req.body);
       const { first_name, last_name, user_email } = req.body;
       const hash = bcrypt.hashSync(password, 10);
       const cred = hash;

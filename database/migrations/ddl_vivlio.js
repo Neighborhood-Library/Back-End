@@ -59,6 +59,8 @@ exports.up = function(knex) {
                .references('id')
                .inTable('users')
                .notNullable();
+            tbl.string('first_name')
+                .notNullable();
             // tbl.integer('receiver_id')
             //    .references('id')
             //    .inTable('users')

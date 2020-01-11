@@ -23,15 +23,10 @@ async function findBookById(id){
 async function findAllSameBooks(id) {
     const allBooks = await db('lender_collection').where({google_book_id: id});
 
-    console.log(allBooks);
-
     if (allBooks.length <= 0) {
         return [];
     } else {
         const activeBooks = allBooks.filter(book => book.is_available === true);
-
-        console.log(activeBooks);
-    
         return activeBooks;
     }
 }
@@ -45,6 +40,8 @@ async function addBook(lenderCollectionItem){
 // Toggle the availability flag
 async function toggleAvailability(lenderCollectionItem){
     const changes = lenderCollectionItem;
+    console.log('changes model', changes);
+
     changes.is_available = !changes.is_available;
     await db('lender_collection').where({ id: changes.id }).update(changes);
     return findBooksByLenderId(changes.lender_id);
