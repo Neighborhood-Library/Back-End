@@ -12,7 +12,7 @@ async function findTransaction(user_id, google_book_id) {
 
   // get books where lender id and google book id are found
   const lendTransactions = await db("transactions").where({ lender_id: user_id, google_book_id });
-  console.log('lendTrans', lendTranscations);
+  console.log('lendTrans', lendTransactions);
 
   if (lendTransactions.length === 0) {
     // if lender transaction does not match, check with borrower id
