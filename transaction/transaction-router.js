@@ -13,9 +13,9 @@ router.get('/:user&:book', async (req, res) => {
     const transaction = await transactionModel.findTransaction(user, book);
     
     if (transaction.length > 0) {
-      res.status(200).send({message: transaction});
+      res.status(200).json({message: transaction});
     } else {
-      res.status(200);
+      res.status(200).json();
     }
   } catch(err) {
     console.log(err);
