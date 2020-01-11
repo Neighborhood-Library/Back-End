@@ -14,7 +14,7 @@ passport.serializeUser((user, done) => {
 
 //takes the user creds from serializeuser and makes a request to our database and calls done with the user info.  Passport then
 //stores the user info on req.user, and we now have access to the user profile
-passport.deserializeUser( async (id, done) => {  
+passport.deserializeUser( async (id, done) => { 
     const User = await db('users').where({id: id});
     
     if (User) {
