@@ -12,7 +12,8 @@ router.get('/google', passport.authenticate('google', {
 // gets user info back after log in
 router.get('/google/callback', passport.authenticate('google'),
     (req, res) => {
-        res.redirect(`${req.origin}/dashboard`);
+    console.log(req.headers);
+        res.redirect(`${req.headers.origin}/dashboard`);
     }
 );
 
