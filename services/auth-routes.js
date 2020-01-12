@@ -12,11 +12,12 @@ router.get('/google', passport.authenticate('google', {
 // gets user info back after log in
 router.get('/google/callback', passport.authenticate('google'),
     (req, res) => {
-        console.log(req.headers);
-        let reqURL = req.headers.referrer;
+        let reqURL = req.headers.referer;
         reqURL = reqURL.split('.com/');
         reqURL[1] = 'dashboard';
-        const newURL = reqURL.join('.com/')
+        const newURL = reqURL.join('.com/');
+    
+        console.log('newURL', newURL);
     
         res.redirect(newURL);
     }
