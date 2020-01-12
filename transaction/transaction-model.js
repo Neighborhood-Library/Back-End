@@ -16,8 +16,11 @@ async function findTransaction(user_id, google_book_id) {
   
   // find if lenders transactions for user is valid
   const validTrans = filterReturn(lendTransactions);
+  
+  console.log('validTrans',validTrans);
+  console.log('lendTrans', lendTransactions);
 
-  if (validTrans.length > 0) {
+  if (validTrans === undefined || validTrans.length > 0) {
     // if lender transaction does not match, check with borrower id
     const borrTransactions = await db("transactions").where({ borrower_id: user_id, google_book_id});
     console.log('borrTransactions', borrTransactions);
