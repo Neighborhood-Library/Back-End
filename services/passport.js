@@ -49,7 +49,7 @@ passport.use(
      
         await addNewUser(profile);
         
-        const newUser = await db('users').where({user_email: profile.emails[0]});
+        const newUser = await db('users').where({user_email: profile.emails[0].value});
       
         done(null, newUser);
 }));
