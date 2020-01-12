@@ -47,7 +47,9 @@ passport.use(
             return done(null, user);
         }
      
-        let newUser = await addNewUser(profile);
+        await addNewUser(profile);
+        
+        const newUser = await db('users').where({user_email: profile.emails[0]});
       
         done(null, newUser);
 }));
