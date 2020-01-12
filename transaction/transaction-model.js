@@ -9,12 +9,18 @@ module.exports = {
 
 // Find transaction for a given id
 async function findTransaction(user_id, google_book_id) {
-
+  
+  // check if ID is lender or borrower
   // get books where lender id and google book id are found
   const lendTransactions = await db("transactions").where({ lender_id: user_id, google_book_id });
+  
+  // find if lenders transactions for user is valid
+  const validTrans = lendTransactions.filter(trans => trans.return_time === null);
+  
   console.log('lendTrans', lendTransactions);
+  console.log('validTrans', validTrans);
 
-  if (lendTransactions.length === 0) {
+  if (validTrans.length === 0) {
     // if lender transaction does not match, check with borrower id
     const borrTransactions = await db("transactions").where({ borrower_id: user_id, google_book_id});
     console.log('borrTransactions', borrTransactions);
