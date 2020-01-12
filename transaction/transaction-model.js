@@ -20,7 +20,7 @@ async function findTransaction(user_id, google_book_id) {
   console.log('lendTrans', lendTransactions);
   console.log('validTrans', validTrans);
 
-  if (validTrans.id) {
+  if (validTrans === undefined) {
     // if lender transaction does not match, check with borrower id
     const borrTransactions = await db("transactions").where({ borrower_id: user_id, google_book_id});
     console.log('borrTransactions', borrTransactions);
