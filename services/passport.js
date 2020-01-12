@@ -9,6 +9,8 @@ require('./passportLocal.js');
 //takes the user from the done call in the passport.use callback, and sets the session to rember them  by the second parameter in done
 //passport stores the user[0].user_credential on req.passport
 passport.serializeUser((user, done) => {
+    console.log('serializeUser', user);
+    
     done(null, user[0].id);
 });
 
@@ -16,6 +18,8 @@ passport.serializeUser((user, done) => {
 //stores the user info on req.user, and we now have access to the user profile
 passport.deserializeUser( async (id, done) => { 
     const User = await db('users').where({id: id});
+    
+    console.log('id deserialize', id);
     
     if (User) {
         done(null, User);
