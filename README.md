@@ -22,42 +22,63 @@ To get the server running locally:
 
 ## Endpoints
 
-#### User Routes
+#### Auth Routes
+API prefix: `/auth`
+
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/logout`               | Returns user info.                                 |
+| GET    | `/current_user`         | Returns user info based on cookie data.            |
+| POST   | `/login`                | Checks user creds and assigns cookie.              |
+| POST   | `/register`             | Registers user.                                    |
+
+#### Message Routes
 API prefix: `/api/users`
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/:id`                | admins, logged in user  | Returns user info.                     |
-| POST   | `/`                   | admins, logged in user  | Updates user information.              |
-| PUT    | `/:id`                | admins, logged in user  | Returns info for a single user.        |
-| DELETE | `/:id`                | admins, logged in user  | Delete user.                           |
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/:id`                  | Returns user info.                                 |
+| GET    | `/tran/:transaction_id` | Updates info for a single user.                    |
+| POST   | `/`                     | Creates message.                                   |
 
-#### Lender Routes
+#### User Routes (protected)
+API prefix: `/api/users`
+
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/:id`                  | Returns user info.                                 |
+| PUT    | `/:id`                  | Updates info for a single user.                    |
+| DELETE | `/:id`                  | Delete user.                                       |
+
+#### Lender Routes (protected)
 API prefix: `/api/lender-collection`
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/:lender-id`           | admins, logged in user  | Returns books added by lender.                     |
-| POST   | `/`                     | admins, logged in user  | Adds book record for lender.                       |
-| PUT    | `/:id`                  | admins, logged in user  | Updates if book is available.                      |
-| DELETE | `/:id`                  | admins, logged in user  | Deletes book record for lender.                    |
-#### Borrower Routes
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/:lender_id`           | Returns books added by lender.                     |
+| GET    | `/book/:book_id`        | Returns books with same google ID                  |
+| POST   | `/`                     | Adds book record for lender.                       |
+| PUT    | `/:id`                  | Updates if book is available.                      |
+| DELETE | `/:id`                  | Deletes book record for lender.                    |
+
+#### Borrower Routes (protected)
 API prefix: `/api/borrower-wishlist`
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/:borrower_id`         | admins, logged in user  | Returns wishlisted books added by borrow.        |
-| POST   | `/`                     | admins, logged in user  | Adds book record to borrower wishlist.         |
-| PUT    | `/:id`                  | admins, logged in user  | Updates book request status for borrow record.    |
-| DELETE | `/:id`                  | admins, logged in user  | Deletes wishlisted book for borrower.         |
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/:borrower_id`         | Returns wishlisted books added by borrow.          |
+| POST   | `/`                     | Adds book record to borrower wishlist.             |
+| PUT    | `/:id`                  | Updates book request status for borrow record.     |
+| DELETE | `/:id`                  | Deletes wishlisted book for borrower.              |
 
-#### User Routes
+#### Transaction Routes (protected)
 API prefix: `/api/transaction`
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| POST   | `/:id`                | admins, logged in user  | Adds lend/borrow transaction.          |
-| PUT    | `/:id`                   | admins, logged in user  | Updates lend/borrow transaction.|
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/:user&:book`          | Return active transaction by user ID and book ID.  |
+| POST   | `/`                     | Adds transaction.                                  |
+| PUT    | `/:id`                  | Updates transaction with return date.              |
 
 
 # Data Model
@@ -68,13 +89,13 @@ API prefix: `/api/transaction`
 
 ```
 {
-  id: UUID
+  id: UUID,
+  first_name: STRING
+  last_name: STRING
   user_name: STRING
   user_email: STRING
   user_identity: STRING (classification of login)
   user_credential: STRING
-  city: STRING
-  state: STRING
 }
 ```
 
@@ -116,9 +137,23 @@ API prefix: `/api/transaction`
   borrower_id: INTEGER (references id in USERS table)
   lender_id: INTEGER (references id in USERS table)
   google_book_id: STRING
-  isbn: STRING
   borrow_time: TIMESTAMP (auto assigned)
   return_time: TIMESTAMP (auto assigned)
+}
+```
+
+#### MESSAGES
+
+---
+
+```
+{
+  id: UUID
+  transaction_id: INTEGER (references id in TRANSACTIONS table)
+  sender_id: INTEGER (references id in USERS table)
+  first_name: STRING
+  content: STRING
+  message_time: TIMESTAMP (auto assigned)
 }
 ```
 
@@ -128,7 +163,7 @@ API prefix: `/api/transaction`
 #### USERS
 
 - `getUserById(id)` -> Returns user info by user ID
-- `addUsers(info)` -> Creates user
+- `addUser(info)` -> Creates user
 - `updateUser(info, id)` -> Updates user by user ID
 - `removeUser(id)` -> Deletes user by user ID
 
@@ -136,9 +171,11 @@ API prefix: `/api/transaction`
 
 - `findBooksByLenderId(lender_id)` -> Returns all books by lender ID
 - `findBookById(id)` -> Returns lendable book by ID
+- `findAllSameBooks(id)` -> Returns lendable books by google ID
 - `addBook(lenderBook)` -> Creates lendable book
 - `toggleAvailability(lenderBook)` -> Updates book available status by google_book_id
 - `removeBook(lenderBook)` -> Deletes lendable book by lender ID
+- `findBookByLenderIdAndGoogleBookId(lenderID, googleBookId, isAvailable` -> Find book by lender ID and google book id
 
 #### BORROWERS
 
@@ -147,13 +184,21 @@ API prefix: `/api/transaction`
 - `addBook(borrowWishlist)` -> Creates borrow request for book
 - `toggleRequestToBorrow(borrowWishlist)` -> Toggles borrow request flag in UI
 - `removeBook(borrowWishlist)` -> Deletes book request
+- `findBookByBorrowerIdAndGoogleBookId(borrowerId, googleBookId, requestToBorrow)` -> Find book by borrower Id and google book id
 
 #### TRANSACTIONS
 
+- `findTransaction(user_id, google_book_id)` -> Returns transaction by user ID and google ID
 - `findTransactionById(id)` -> Returns transaction info
 - `addTransaction(info)` -> Creates transaction
 - `updateReturnTime(id)` -> Updates transaction with returned book date
 
+#### MESSAGES
+
+- `findMessageById(id)` -> Returns message by message ID
+- `findMessagesByBookId(google_book_id)` -> Find messages by google book id
+- `findMessagesByTranId(transaction_id)` -> Find messages by transaction id
+- `addMessage(message)` -> addMessage(message)
 
 ## Environment Variables
 
@@ -167,6 +212,7 @@ create a .env file that includes the following:
 - googleClientID = Google API ID (Google+ API)
 - googleClientSecret = Google API secret
 - DB_ENV = set to "development", plans to impliment "production"
+- REQ_URL = set to requesting URL referrer to pass CORS requirements
     
 ## Contributing
 
