@@ -9,16 +9,12 @@ To get the server running locally:
 - Clone this repo
 - **yarn install** to install all required dependencies
 - **yarn server** to start the local server
-- **yarn test** to start server using testing environment
 
-### Backend framework goes here
+### Node, Express, and PostgreSQL
 
-🚫 Why did you choose this framework?
-
--    Point One
--    Point Two
--    Point Three
--    Point Four
+-    Node and Express are core foundations to start from
+-    Easy package management
+-    PostgreSQL allowed for data persistence and relational data
 
 ## Endpoints
 
