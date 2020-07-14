@@ -30,10 +30,11 @@ server.use(express.json());
 server.use(flash());
 server.use(
   cookieSession({
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      keys: [process.env.cookieKey],
-      // secure: true,
-      sameSite: 'lax'
+    name: "library-user",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [process.env.cookieKey],
+    // secure: true,
+    sameSite: 'lax'
   })
 );
 server.use(passport.initialize());
@@ -59,7 +60,6 @@ const app = http.createServer(server);
 const io = require('socket.io')(app);
 
 io.on('connection', (socket) => {
-  // console.log(socket.id);
 
   socket.on('message', (msg) => {
     socket.emit('retMsg', {
