@@ -40,6 +40,8 @@ async function addBook(lenderCollectionItem){
 // Toggle the availability flag
 async function toggleAvailability(lenderCollectionItem){
     const changes = lenderCollectionItem;
+    console.log('changes model', changes);
+
     changes.is_available = !changes.is_available;
     await db('lender_collection').where({ id: changes.id }).update(changes);
     return findBooksByLenderId(changes.lender_id);

@@ -9,24 +9,22 @@ require('./passportLocal.js');
 //takes the user from the done call in the passport.use callback, and sets the session to rember them  by the second parameter in done
 //passport stores the user[0].user_credential on req.passport
 passport.serializeUser((user, done) => {
-    console.log('serialize fired! pass-12', user);
+    console.log('serializeUser', user);
+    
     done(null, user[0].id);
 });
 
 //takes the user creds from serializeuser and makes a request to our database and calls done with the user info.  Passport then
 //stores the user info on req.user, and we now have access to the user profile
-passport.deserializeUser( async (id, done) => {  
-    console.log('deserialize user id', id);
-
-    const User = await db('users').where({user_credential: id});
-
-    console.log('passport.js line 21', User);
+passport.deserializeUser( async (id, done) => { 
+    const User = await db('users').where({id: id});
+    
+    console.log('User line 22<br>', User);
+    console.log('id deserialize', id);
     
     if (User) {
-        console.log('passport.js line 24', User);
         done(null, User);
     } else {
-        console.log('passport.js line 27');
         done(null, null);
     }
 });
@@ -41,19 +39,22 @@ passport.use(
         proxy: true
     }, async (accessToken, refreshToken, profile, done) => {   
         let user = await db('users').where({user_credential: profile.id});
+        
+        console.log('profile', profile);
+        console.log('user', user);
     
         if (user.length > 0) {
-            console.log('user:',user);
             return done(null, user);
-        };
+        }
      
-        let newUser = await addNewUser(profile);
+        await addNewUser(profile);
+        
+        const newUser = await db('users').where({user_email: profile.emails[0].value});
       
         done(null, newUser);
 }));
 
 async function addNewUser(p) {
-    let newUser = await db('users').insert({user_name: p.emails[0].value, user_email: p.emails[0].value, user_identity: 'google', user_credential: p.id});
-    // first_name: p.name.givenName, last_name: p.name.familyName,
+    let newUser = await db('users').insert({first_name: p.name.givenName, last_name: p.name.familyName, user_name: p.emails[0].value, user_email: p.emails[0].value, user_identity: 'google', user_credential: p.id});
     return newUser
 }

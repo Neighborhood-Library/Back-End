@@ -24,7 +24,23 @@ async function findMessagesByTranId(transaction_id){
 
 // Create a message
 async function addMessage(message){
-    /*const [id] =*/ return await db('messages').insert(message).returning('id');
+    console.log(message);
+
+    const [getUserInfo] = await db('users').where({id: message.sender_id});
+    console.log('getUserInfo', getUserInfo);
+
+    const [newMessageID] = await db('messages').insert({...message, first_name: getUserInfo.first_name}).returning('id');
+    console.log('newMessageID', newMessageID)
+    
+    const [newMessage] = await db('messages').where({id: newMessageID});
+    console.log('newMessage', newMessage);
+
+    if (newMessage) {
+        return newMessage;
+    } else {
+        return;
+    }
+
     // return findMessageById(id);
 }
 
