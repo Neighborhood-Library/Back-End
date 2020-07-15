@@ -19,9 +19,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser( async (id, done) => { 
     const User = await db('users').where({id: id});
     
-    console.log('User line 22<br>', User);
-    console.log('id deserialize', id);
-    
     if (User) {
         done(null, User);
     } else {

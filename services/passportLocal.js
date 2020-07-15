@@ -30,9 +30,9 @@ passport.use('local.login', new LocalStrategy({
       
     if (user !== [] && await bcrypt.compare(password, user[0].user_credential)) {
       return done(null, user);
-    } else {
-      return done(null, false);
     }
+
+    return done(null, false);
   }
 ));
 
@@ -44,30 +44,20 @@ passport.use('local.register', new LocalStrategy({
   passReqToCallback: true,
 },
  async function(req, username, password, done) {
-  console.log('registering user');
-
     const user = await db('users').where({user_name: username}); 
-      
       
     if (user.length > 0) {
       console.log('username taken');
       return done(null, false, req.flash('registerMessage', 'username is already taken'));
-    } else {
-      const { first_name, last_name, user_email } = req.body;
-      const hash = bcrypt.hashSync(password, 10);
-      const cred = hash;
-      const newUser = await db('users').insert(
-        {first_name, last_name, user_name: username, user_email, user_identity: 'muoVivlio', user_credential: cred})
-        .then(async () => {
-          console.log('returning new user');
-          return await db('users').where({user_name: username});
-        })
-        .catch(err => {
-          console.log(err, 'passportLocal-70');
-        });
-        
-      return done(null, newUser);  
     }
-    
+
+    const { first_name, last_name, user_email } = req.body;
+    const hash = bcrypt.hashSync(password, 10);
+    const newUser = await db('users').insert(
+      {first_name, last_name, user_name: username, user_email, user_identity: 'muoVivlio', user_credential: hash});
+
+    const getNewUser = await db('users').where({user_name: username});
+      
+    return done(null, getNewUser);
   }
 ));
