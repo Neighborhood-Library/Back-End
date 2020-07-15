@@ -1,6 +1,6 @@
 # API Documentation
 
-## 1️⃣ Getting started
+## Getting started
 
 To get the server running locally:
 
@@ -107,7 +107,7 @@ API prefix: `/api/transaction`
 }
 ```
 
-#### 2️⃣ ORGANIZATIONS
+#### ORGANIZATIONS
 
 ---
 
@@ -239,7 +239,7 @@ API prefix: `/api/transaction`
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
-<<<<<<< HEAD
+
 - PGHOST = postgreSQL host
 - PGDB = postgreSQL database name
 - PGUSER = postgreSQL super user name
@@ -247,18 +247,7 @@ create a .env file that includes the following:
 - googleClientID = Google API ID (Google+ API)
 - googleClientSecret = Google API secret
 - DB_ENV = set to "development", plans to impliment "production"
-- REQ_URL = set to requesting URL referrer to pass CORS requirements
-=======
 
-🚫 These are just examples, replace them with the specifics for your app
-    
-    *  STAGING_DB - optional development db for using functionality not available in SQLite
-    *  NODE_ENV - set to "development" until ready for "production"
-    *  JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-*=+)') for i in range(50)])
-    *  SENDGRID_API_KEY - this is generated in your Sendgrid account
-    *  stripe_secret - this is generated in the Stripe dashboard
->>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
-    
 ## Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
@@ -294,12 +283,3 @@ Remember that this project is licensed under the MIT license, and by submitting 
 ### Attribution
 
 These contribution guidelines have been adapted from [this good-Contributing.md-template](https://gist.github.com/PurpleBooth/b24679402957c63ec426).
-
-## Documentation
-
-<<<<<<< HEAD
-See [Frontend Documentation](https://github.com/Lambda-School-Labs/neighborhood-library-fe) for details on the fronend of our project.
-=======
-See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
-🚫 Add DS iOS and/or Andriod links here if applicable.
->>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
