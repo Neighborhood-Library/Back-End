@@ -1,10 +1,18 @@
+🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
+
+🚫 The numbers 1️⃣ through 3️⃣ next to each item represent the week that part of the docs needs to be comepleted by.  Make sure to delete the numbers by the end of Labs.
+
+🚫 Each student has a required minimum number of meaningful PRs each week per the rubric.  Contributing to docs does NOT count as a PR to meet your weekly requirements.
+
 # API Documentation
 
-#### Backend delpoyed to Heroku (https://muovivlio.herokuapp.com/)
+#### 1️⃣ Backend delpoyed at [🚫name service here](🚫add URL here) <br>
 
-## Getting started
+## 1️⃣ Getting started
 
 To get the server running locally:
+
+🚫 adjust these scripts to match your project
 
 - Clone this repo
 - **yarn install** to install all required dependencies
@@ -109,27 +117,29 @@ API prefix: `/api/transaction`
 }
 ```
 
-#### BORROWER WISHLIST
+#### 2️⃣ ORGANIZATIONS
 
 ---
 
 ```
 {
   id: UUID
-  borrower_id: INTEGER (references id in USERS table)
-  google_book_id: STRING
-  isbn: STRING
-  request_to_borrow: BOOLEAN (defaults to false)
+  name: STRING
+  industry: STRING
+  paid: BOOLEAN
+  customer_id: STRING
+  subscription_id: STRING
 }
 ```
 
-#### TRANSACTIONS
+#### USERS
 
 ---
 
 ```
 {
   id: UUID
+<<<<<<< HEAD
   borrower_id: INTEGER (references id in USERS table)
   lender_id: INTEGER (references id in USERS table)
   google_book_id: STRING
@@ -153,18 +163,39 @@ API prefix: `/api/transaction`
 }
 ```
 
+=======
+  organization_id: UUID foreign key in ORGANIZATIONS table
+  first_name: STRING
+  last_name: STRING
+  role: STRING [ 'owner', 'supervisor', 'employee' ]
+  email: STRING
+  phone: STRING
+  cal_visit: BOOLEAN
+  emp_visit: BOOLEAN
+  emailpref: BOOLEAN
+  phonepref: BOOLEAN
+}
+```
 
-## Actions
+## 2️⃣ Actions
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
-#### USERS
+🚫 This is an example, replace this with the actions that pertain to your backend
 
+`getOrgs()` -> Returns all organizations
+
+<<<<<<< HEAD
 - `getUserById(id)` -> Returns user info by user ID
 - `addUser(info)` -> Creates user
 - `updateUser(info, id)` -> Updates user by user ID
 - `removeUser(id)` -> Deletes user by user ID
+=======
+`getOrg(orgId)` -> Returns a single organization by ID
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
-#### LENDERS
+`addOrg(org)` -> Returns the created org
 
+<<<<<<< HEAD
 - `findBooksByLenderId(lender_id)` -> Returns all books by lender ID
 - `findBookById(id)` -> Returns lendable book by ID
 - `findAllSameBooks(id)` -> Returns lendable books by google ID
@@ -172,18 +203,30 @@ API prefix: `/api/transaction`
 - `toggleAvailability(lenderBook)` -> Updates book available status by google_book_id
 - `removeBook(lenderBook)` -> Deletes lendable book by lender ID
 - `findBookByLenderIdAndGoogleBookId(lenderID, googleBookId, isAvailable` -> Find book by lender ID and google book id
+=======
+`updateOrg(orgId)` -> Update an organization by ID
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
-#### BORROWERS
+`deleteOrg(orgId)` -> Delete an organization by ID
+<br>
+<br>
+<br>
+`getUsers(orgId)` -> if no param all users
 
+<<<<<<< HEAD
 - `findBooksByBorrowerId(borrower_id)` -> Returns books by borrower ID
 - `findBookById(id)` -> Returns book by borrower ID
 - `addBook(borrowWishlist)` -> Creates borrow request for book
 - `toggleRequestToBorrow(borrowWishlist)` -> Toggles borrow request flag in UI
 - `removeBook(borrowWishlist)` -> Deletes book request
 - `findBookByBorrowerIdAndGoogleBookId(borrowerId, googleBookId, requestToBorrow)` -> Find book by borrower Id and google book id
+=======
+`getUser(userId)` -> Returns a single user by user ID
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
-#### TRANSACTIONS
+`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
 
+<<<<<<< HEAD
 - `findTransaction(user_id, google_book_id)` -> Returns transaction by user ID and google ID
 - `findTransactionById(id)` -> Returns transaction info
 - `addTransaction(info)` -> Creates transaction
@@ -195,12 +238,18 @@ API prefix: `/api/transaction`
 - `findMessagesByBookId(google_book_id)` -> Find messages by google book id
 - `findMessagesByTranId(transaction_id)` -> Find messages by transaction id
 - `addMessage(message)` -> addMessage(message)
+=======
+`updateUser(userId, changes object)` -> Updates a single user by ID.
 
-## Environment Variables
+`deleteUser(userId)` -> deletes everything dependent on the user
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
+
+## 3️⃣ Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
+<<<<<<< HEAD
 - PGHOST = postgreSQL host
 - PGDB = postgreSQL database name
 - PGUSER = postgreSQL super user name
@@ -209,6 +258,16 @@ create a .env file that includes the following:
 - googleClientSecret = Google API secret
 - DB_ENV = set to "development", plans to impliment "production"
 - REQ_URL = set to requesting URL referrer to pass CORS requirements
+=======
+
+🚫 These are just examples, replace them with the specifics for your app
+    
+    *  STAGING_DB - optional development db for using functionality not available in SQLite
+    *  NODE_ENV - set to "development" until ready for "production"
+    *  JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-*=+)') for i in range(50)])
+    *  SENDGRID_API_KEY - this is generated in your Sendgrid account
+    *  stripe_secret - this is generated in the Stripe dashboard
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
     
 ## Contributing
 
@@ -248,4 +307,9 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
+<<<<<<< HEAD
 See [Frontend Documentation](https://github.com/Lambda-School-Labs/neighborhood-library-fe) for details on the fronend of our project.
+=======
+See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
+🚫 Add DS iOS and/or Andriod links here if applicable.
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
