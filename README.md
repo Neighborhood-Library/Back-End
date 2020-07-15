@@ -17,43 +17,105 @@ To get the server running locally:
 - Clone this repo
 - **yarn install** to install all required dependencies
 - **yarn server** to start the local server
-- **yarn test** to start server using testing environment
 
-### Backend framework goes here
+### Node, Express, and PostgreSQL
 
-🚫 Why did you choose this framework?
+-    Node and Express are core foundations to start from
+-    Easy package management
+-    PostgreSQL allowed for data persistence and relational data
 
--    Point One
--    Point Two
--    Point Three
--    Point Four
+## Endpoints
 
-## 2️⃣ Endpoints
+#### Auth Routes
+API prefix: `/auth`
 
-🚫This is a placeholder, replace the endpoints, access controll, and descriptioin to match your project
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/logout`               | Returns user info.                                 |
+| GET    | `/current_user`         | Returns user info based on cookie data.            |
+| POST   | `/login`                | Checks user creds and assigns cookie.              |
+| POST   | `/register`             | Registers user.                                    |
 
-#### Organization Routes
+#### Message Routes
+API prefix: `/api/users`
 
-| Method | Endpoint                | Access Control | Description                                  |
-| ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/organizations/:orgId` | all users      | Returns the information for an organization. |
-| PUT    | `/organizatoins/:orgId` | owners         | Modify an existing organization.             |
-| DELETE | `/organizations/:orgId` | owners         | Delete an organization.                      |
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/:id`                  | Returns user info.                                 |
+| GET    | `/tran/:transaction_id` | Updates info for a single user.                    |
+| POST   | `/`                     | Creates message.                                   |
 
-#### User Routes
+#### User Routes (protected)
+API prefix: `/api/users`
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/users/current`        | all users           | Returns info for the logged in user.               |
-| GET    | `/users/org/:userId`    | owners, supervisors | Returns all users for an organization.             |
-| GET    | `/users/:userId`        | owners, supervisors | Returns info for a single user.                    |
-| POST   | `/users/register/owner` | none                | Creates a new user as owner of a new organization. |
-| PUT    | `/users/:userId`        | owners, supervisors |                                                    |
-| DELETE | `/users/:userId`        | owners, supervisors |                                                    |
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/:id`                  | Returns user info.                                 |
+| PUT    | `/:id`                  | Updates info for a single user.                    |
+| DELETE | `/:id`                  | Delete user.                                       |
+
+#### Lender Routes (protected)
+API prefix: `/api/lender-collection`
+
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/:lender_id`           | Returns books added by lender.                     |
+| GET    | `/book/:book_id`        | Returns books with same google ID                  |
+| POST   | `/`                     | Adds book record for lender.                       |
+| PUT    | `/:id`                  | Updates if book is available.                      |
+| DELETE | `/:id`                  | Deletes book record for lender.                    |
+
+#### Borrower Routes (protected)
+API prefix: `/api/borrower-wishlist`
+
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/:borrower_id`         | Returns wishlisted books added by borrow.          |
+| POST   | `/`                     | Adds book record to borrower wishlist.             |
+| PUT    | `/:id`                  | Updates book request status for borrow record.     |
+| DELETE | `/:id`                  | Deletes wishlisted book for borrower.              |
+
+#### Transaction Routes (protected)
+API prefix: `/api/transaction`
+
+| Method | Endpoint                | Description                                        |
+| ------ | ----------------------- | -------------------------------------------------- |
+| GET    | `/:user&:book`          | Return active transaction by user ID and book ID.  |
+| POST   | `/`                     | Adds transaction.                                  |
+| PUT    | `/:id`                  | Updates transaction with return date.              |
+
 
 # Data Model
 
-🚫This is just an example. Replace this with your data model
+#### USERS
+
+---
+
+```
+{
+  id: UUID,
+  first_name: STRING
+  last_name: STRING
+  user_name: STRING
+  user_email: STRING
+  user_identity: STRING (classification of login)
+  user_credential: STRING
+}
+```
+
+#### LENDER COLLECTION
+
+---
+
+```
+{
+  id: UUID
+  lender_id: INTEGER (references id in USERS table)
+  google_book_id: STRING
+  isbn: INTEGER
+  is_available: BOOLEAN
+}
+```
 
 #### 2️⃣ ORGANIZATIONS
 
@@ -77,6 +139,31 @@ To get the server running locally:
 ```
 {
   id: UUID
+<<<<<<< HEAD
+  borrower_id: INTEGER (references id in USERS table)
+  lender_id: INTEGER (references id in USERS table)
+  google_book_id: STRING
+  borrow_time: TIMESTAMP (auto assigned)
+  return_time: TIMESTAMP (auto assigned)
+}
+```
+
+#### MESSAGES
+
+---
+
+```
+{
+  id: UUID
+  transaction_id: INTEGER (references id in TRANSACTIONS table)
+  sender_id: INTEGER (references id in USERS table)
+  first_name: STRING
+  content: STRING
+  message_time: TIMESTAMP (auto assigned)
+}
+```
+
+=======
   organization_id: UUID foreign key in ORGANIZATIONS table
   first_name: STRING
   last_name: STRING
@@ -91,16 +178,34 @@ To get the server running locally:
 ```
 
 ## 2️⃣ Actions
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
 🚫 This is an example, replace this with the actions that pertain to your backend
 
 `getOrgs()` -> Returns all organizations
 
+<<<<<<< HEAD
+- `getUserById(id)` -> Returns user info by user ID
+- `addUser(info)` -> Creates user
+- `updateUser(info, id)` -> Updates user by user ID
+- `removeUser(id)` -> Deletes user by user ID
+=======
 `getOrg(orgId)` -> Returns a single organization by ID
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
 `addOrg(org)` -> Returns the created org
 
+<<<<<<< HEAD
+- `findBooksByLenderId(lender_id)` -> Returns all books by lender ID
+- `findBookById(id)` -> Returns lendable book by ID
+- `findAllSameBooks(id)` -> Returns lendable books by google ID
+- `addBook(lenderBook)` -> Creates lendable book
+- `toggleAvailability(lenderBook)` -> Updates book available status by google_book_id
+- `removeBook(lenderBook)` -> Deletes lendable book by lender ID
+- `findBookByLenderIdAndGoogleBookId(lenderID, googleBookId, isAvailable` -> Find book by lender ID and google book id
+=======
 `updateOrg(orgId)` -> Update an organization by ID
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
 `deleteOrg(orgId)` -> Delete an organization by ID
 <br>
@@ -108,19 +213,52 @@ To get the server running locally:
 <br>
 `getUsers(orgId)` -> if no param all users
 
+<<<<<<< HEAD
+- `findBooksByBorrowerId(borrower_id)` -> Returns books by borrower ID
+- `findBookById(id)` -> Returns book by borrower ID
+- `addBook(borrowWishlist)` -> Creates borrow request for book
+- `toggleRequestToBorrow(borrowWishlist)` -> Toggles borrow request flag in UI
+- `removeBook(borrowWishlist)` -> Deletes book request
+- `findBookByBorrowerIdAndGoogleBookId(borrowerId, googleBookId, requestToBorrow)` -> Find book by borrower Id and google book id
+=======
 `getUser(userId)` -> Returns a single user by user ID
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
 `addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
 
+<<<<<<< HEAD
+- `findTransaction(user_id, google_book_id)` -> Returns transaction by user ID and google ID
+- `findTransactionById(id)` -> Returns transaction info
+- `addTransaction(info)` -> Creates transaction
+- `updateReturnTime(id)` -> Updates transaction with returned book date
+
+#### MESSAGES
+
+- `findMessageById(id)` -> Returns message by message ID
+- `findMessagesByBookId(google_book_id)` -> Find messages by google book id
+- `findMessagesByTranId(transaction_id)` -> Find messages by transaction id
+- `addMessage(message)` -> addMessage(message)
+=======
 `updateUser(userId, changes object)` -> Updates a single user by ID.
 
 `deleteUser(userId)` -> deletes everything dependent on the user
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
 ## 3️⃣ Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
+<<<<<<< HEAD
+- PGHOST = postgreSQL host
+- PGDB = postgreSQL database name
+- PGUSER = postgreSQL super user name
+- PGPASS = postgreSQL super user password
+- googleClientID = Google API ID (Google+ API)
+- googleClientSecret = Google API secret
+- DB_ENV = set to "development", plans to impliment "production"
+- REQ_URL = set to requesting URL referrer to pass CORS requirements
+=======
 
 🚫 These are just examples, replace them with the specifics for your app
     
@@ -129,6 +267,7 @@ create a .env file that includes the following:
     *  JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-*=+)') for i in range(50)])
     *  SENDGRID_API_KEY - this is generated in your Sendgrid account
     *  stripe_secret - this is generated in the Stripe dashboard
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
     
 ## Contributing
 
@@ -168,5 +307,9 @@ These contribution guidelines have been adapted from [this good-Contributing.md-
 
 ## Documentation
 
+<<<<<<< HEAD
+See [Frontend Documentation](https://github.com/Lambda-School-Labs/neighborhood-library-fe) for details on the fronend of our project.
+=======
 See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
 🚫 Add DS iOS and/or Andriod links here if applicable.
+>>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
