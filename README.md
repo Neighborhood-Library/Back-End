@@ -129,7 +129,6 @@ API prefix: `/api/transaction`
 ```
 {
   id: UUID
-<<<<<<< HEAD
   borrower_id: INTEGER (references id in USERS table)
   lender_id: INTEGER (references id in USERS table)
   google_book_id: STRING
@@ -153,39 +152,17 @@ API prefix: `/api/transaction`
 }
 ```
 
-=======
-  organization_id: UUID foreign key in ORGANIZATIONS table
-  first_name: STRING
-  last_name: STRING
-  role: STRING [ 'owner', 'supervisor', 'employee' ]
-  email: STRING
-  phone: STRING
-  cal_visit: BOOLEAN
-  emp_visit: BOOLEAN
-  emailpref: BOOLEAN
-  phonepref: BOOLEAN
-}
-```
+# Actions
 
-## 2️⃣ Actions
->>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
+#### Users
 
-🚫 This is an example, replace this with the actions that pertain to your backend
-
-`getOrgs()` -> Returns all organizations
-
-<<<<<<< HEAD
 - `getUserById(id)` -> Returns user info by user ID
 - `addUser(info)` -> Creates user
 - `updateUser(info, id)` -> Updates user by user ID
 - `removeUser(id)` -> Deletes user by user ID
-=======
-`getOrg(orgId)` -> Returns a single organization by ID
->>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
-`addOrg(org)` -> Returns the created org
+#### Lenders
 
-<<<<<<< HEAD
 - `findBooksByLenderId(lender_id)` -> Returns all books by lender ID
 - `findBookById(id)` -> Returns lendable book by ID
 - `findAllSameBooks(id)` -> Returns lendable books by google ID
@@ -193,30 +170,18 @@ API prefix: `/api/transaction`
 - `toggleAvailability(lenderBook)` -> Updates book available status by google_book_id
 - `removeBook(lenderBook)` -> Deletes lendable book by lender ID
 - `findBookByLenderIdAndGoogleBookId(lenderID, googleBookId, isAvailable` -> Find book by lender ID and google book id
-=======
-`updateOrg(orgId)` -> Update an organization by ID
->>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
-`deleteOrg(orgId)` -> Delete an organization by ID
-<br>
-<br>
-<br>
-`getUsers(orgId)` -> if no param all users
+#### Borrowers
 
-<<<<<<< HEAD
 - `findBooksByBorrowerId(borrower_id)` -> Returns books by borrower ID
 - `findBookById(id)` -> Returns book by borrower ID
 - `addBook(borrowWishlist)` -> Creates borrow request for book
 - `toggleRequestToBorrow(borrowWishlist)` -> Toggles borrow request flag in UI
 - `removeBook(borrowWishlist)` -> Deletes book request
 - `findBookByBorrowerIdAndGoogleBookId(borrowerId, googleBookId, requestToBorrow)` -> Find book by borrower Id and google book id
-=======
-`getUser(userId)` -> Returns a single user by user ID
->>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
 
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
+#### Transactions
 
-<<<<<<< HEAD
 - `findTransaction(user_id, google_book_id)` -> Returns transaction by user ID and google ID
 - `findTransactionById(id)` -> Returns transaction info
 - `addTransaction(info)` -> Creates transaction
@@ -228,13 +193,8 @@ API prefix: `/api/transaction`
 - `findMessagesByBookId(google_book_id)` -> Find messages by google book id
 - `findMessagesByTranId(transaction_id)` -> Find messages by transaction id
 - `addMessage(message)` -> addMessage(message)
-=======
-`updateUser(userId, changes object)` -> Updates a single user by ID.
 
-`deleteUser(userId)` -> deletes everything dependent on the user
->>>>>>> 110945f72d1b6d96721a85b821dd69a2ea73540c
-
-## 3️⃣ Environment Variables
+## Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
