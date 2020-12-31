@@ -35,8 +35,8 @@ server.use(
     name: "library-user",
     maxAge: 30 * 24 * 60 * 60 * 1000,
     keys: [process.env.cookieKey],
-    sameSite: "none"
-    // secure: true,
+    sameSite: "none",
+    secure
   })
 );
 server.use(passport.initialize());
