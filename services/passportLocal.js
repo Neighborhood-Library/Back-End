@@ -27,6 +27,8 @@ passport.use('local.login', new LocalStrategy({
 },
   async function(req, username, password, done) {
     let user = await db('users').where({user_name: username});
+
+    console.log('user', user);
       
     if (user !== [] && await bcrypt.compare(password, user[0].user_credential)) {
       return done(null, user);
