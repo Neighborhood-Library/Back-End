@@ -31,6 +31,7 @@ passport.use('local.login', new LocalStrategy({
     console.log('user', user);
       
     if (user !== [] && await bcrypt.compare(password, user[0].user_credential)) {
+      console.log('user login successful');
       return done(null, user);
     }
 
@@ -42,7 +43,7 @@ passport.use('local.login', new LocalStrategy({
 //hashes password, and pulls other creds from req.body sent from frontend to set new user in db and thus passes user into serialize
 passport.use('local.register', new LocalStrategy({
   usernameField: 'user_name',
-  passwordField: 'user_credential',//how is this pulling these out of the user fields?? see https://github.com/jaredhanson/passport-local/blob/master/lib/strategy.js line 71 and 72 linked to line 49 and 50 ie coming from req.body, programmed in there by Jared himself
+  passwordField: 'user_credential',
   passReqToCallback: true,
 },
  async function(req, username, password, done) {
